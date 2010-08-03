@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
+  <meta>
+    <sampleQuery> select * from {table}</sampleQuery>
+  </meta>
+  <bindings>
+    <select itemPath="deputados.deputado" produces="XML">
+      <urls>
+        <url></url>
+      </urls>
+      <paging model="offset">
+        <pagesize id="count" max="300" />
+        <total default="10" />
+      </paging>
+      <inputs>
+        <key id='partido' type='xs:string' paramType='variable' />
+        <key id='cidade' type='xs:string' paramType='variable' />
+      </inputs>
+      <execute><![CDATA[
+
+var querystring = "select * from html where url ='http://agorasou.eu/parlamento/deputados.html' and xpath=\"//table/tr\"";
+var deputados = y.query(querystring);
+var data = <deputados/>;
+var d = deputados.results.tr;
+
+for each (var deputado in d) {
+	var name = deputado.td[0].a.text().toString();
+	var _cidade = deputado.td[1].span.text().toString();
+	var _partido = deputado.td[2].span.text().toString();
+	if (partido && partido.length) {
+		if (!_partido.match(new RegExp(partido, 'i')) ) {
+			continue;
+		}
+	}
+	if (cidade && cidade.length) {
+		if (!_cidade.match(new RegExp(cidade, 'i')) ) {
+			continue;
+		}
+	}
+	var url = "http://www.parlamento.pt" + deputado.td[0].a.@href;
+	var id = url.split("=")[1];
+	// var detail = y.query(querystring).results;
+	var img = "http://app.parlamento.pt/webutils/getimage.aspx?id="+id+"&type=deputado"
+	data.deputados += <deputado>
+		<name>{name}</name>
+		<cidade>{cidade}</cidade>
+		<partido>{_partido}</partido>
+		<foto>{img}</foto>
+		<url>{url}</url>
+	</deputado>;
+}
+
+
+response.object = data;
+
+      ]]></execute>
+    </select>
+  </bindings>
+</table>
