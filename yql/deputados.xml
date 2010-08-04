@@ -18,40 +18,145 @@
       </inputs>
       <execute><![CDATA[
 
-var querystring = "select * from html where url ='http://agorasou.eu/parlamento/deputados.html' and xpath=\"//table/tr\"";
-var deputados = y.query(querystring);
-var data = <deputados/>;
-var d = deputados.results.tr;
+var MemberInfo = function(id, name, party, location) {
+	this.id = id;
+	this.name = name;
+	this.party = party;
+	this.location = location;
+	this.getDetailData();
+}
+MemberInfo.prototype.getDetailData = function() {
+	var url = this.getDetailURL();
+	var query = y.query('select * from html where url=@url', {url: url} );
+	var result = query.results;
+	var completeName = result..span.(@['id']=='ctl00_ctl13_g_8035397e_bdf3_4dc3_b9fb_8732bb699c12_ctl00_ucNome_rptContent_ctl01_lblText');
+	this.completeName = completeName ? completeName.text().toString() : undefined;
+	var profession = result..span.(@['id']=='ctl00_ctl13_g_8035397e_bdf3_4dc3_b9fb_8732bb699c12_ctl00_ucProf_rptContent_ctl01_lblText');
+	this.profession = profession ? profession.text().toString() : undefined;
+	var birthdate = result..span.(@['id']=='ctl00_ctl13_g_8035397e_bdf3_4dc3_b9fb_8732bb699c12_ctl00_ucDOB_rptContent_ctl01_lblText');
+	this.birthdate = birthdate ? birthdate.text().toString() : undefined;
+	var education = result..span.(@['id']=='ctl00_ctl13_g_8035397e_bdf3_4dc3_b9fb_8732bb699c12_ctl00_ucHabilitacoes_rptContent_ctl01_lblText');	
+	this.education = education ? education.text().toString() : undefined;
+	
+	var titles = result..span.(@['id'].toString().match('CargosDesempenha') && !@['id'].toString().match('Titulo'));	
+	this.titles = [];
+	for each (var title in titles) {
+		this.titles.push(title.text().toString());
+	}
 
-for each (var deputado in d) {
-	var name = deputado.td[0].a.text().toString();
-	var _cidade = deputado.td[1].span.text().toString();
-	var _partido = deputado.td[2].span.text().toString();
-	if (partido && partido.length) {
-		if (!_partido.match(new RegExp(partido, 'i')) ) {
+	var previousTitles = result..span.(@['id'].toString().match('CargosExercidos') && !@['id'].toString().match('Titulo'));	
+	this.previousTitles = [];
+	for each (var previousTitle in previousTitles) {
+		this.previousTitles.push(previousTitle.text().toString());
+	}
+
+	var comissions = result..span.(@['id'].toString().match('Comissoes') && !@['id'].toString().match('Titulo'));	
+	this.comissions = [];
+	for each (var comission in comissions) {
+		this.comissions.push(comission.text().toString());
+	}
+	
+	var legislatures = result..table.(@['id'].toString().match('TabLegs')).tr;
+	this.parseLegislatures(legislatures);	
+}
+
+MemberInfo.prototype.parseLegislatures = function (legs) {
+	var legislatures = [];
+	var first = true;
+	for each (var leg in legs) {
+		if (first) {
+			first = false;
 			continue;
 		}
+		var legislature = {};
+		var name = leg.td[0]..span;
+		if (name) legislatures.push(name.text().toString());
 	}
-	if (cidade && cidade.length) {
-		if (!_cidade.match(new RegExp(cidade, 'i')) ) {
-			continue;
-		}
-	}
-	var url = "http://www.parlamento.pt" + deputado.td[0].a.@href;
-	var id = url.split("=")[1];
-	// var detail = y.query(querystring).results;
-	var img = "http://app.parlamento.pt/webutils/getimage.aspx?id="+id+"&type=deputado"
-	data.deputados += <deputado>
-		<name>{name}</name>
-		<cidade>{cidade}</cidade>
-		<partido>{_partido}</partido>
-		<foto>{img}</foto>
-		<url>{url}</url>
-	</deputado>;
+	this.legislatures = legislatures;
 }
 
 
-response.object = data;
+MemberInfo.prototype.getDetailURL = function() {
+	return 'http://www.parlamento.pt/DeputadoGP/Paginas/Biografia.aspx?BID=' + this.id;
+}
+MemberInfo.prototype.getActivitylURL = function() {
+	return 'http://www.parlamento.pt/DeputadoGP/Paginas/ActividadeDeputado.aspx?BID=' + this.id;
+}
+MemberInfo.prototype.getInterestslURL = function() {
+	return 'http://www.parlamento.pt/DeputadoGP/Paginas/RegistoInteresses.aspx?BID=' + this.id;
+}
+MemberInfo.prototype.getFotolURL = function() {
+	return 'http://app.parlamento.pt/webutils/getimage.aspx?type=deputado&id=' + this.id;
+}
+
+var getRemoteMembers = function() {
+	var url = 'http://agorasou.eu/parlamento/deputados.html';
+	var query = y.query('select * from html where url=@url and xpath="//table/tr"', {url: url} );
+	var results = query.results.tr;
+	var deputados = [];
+	
+	for each (var deputado in results) {
+		var _id = deputado.td[0].a.@href.split("=")[1];
+		var _name = deputado.td[0].a.text().toString();
+		var _location = deputado.td[1].span.text().toString();
+		var _party = deputado.td[2].span.text().toString();
+		deputados.push(new MemberInfo(_id, _name, _party, _location));
+		break;
+	}
+	
+	return deputados;
+}
+
+var searchParlamentMembers = function() {
+	var members = getRemoteMembers();
+	var total = members.length;
+	
+	var data = <deputados/>;
+	
+	for (var i = 0; i< total; i++) {
+		 var d = <deputado>
+			<id>{members[i].id}</id>
+			<name>{members[i].name}</name>
+			<completeName>{members[i].completeName}</completeName>
+			<party>{members[i].party}</party>
+			<foto>{members[i].getFotolURL()}</foto>
+			<profession>{members[i].profession}</profession>
+			<birthdate>{members[i].birthdate}</birthdate>
+			<education>{members[i].education}</education>
+		</deputado>;
+
+		var titles = <titles/>
+		for (var h = 0; h < members[i].titles.length; h++) {
+			titles.titles += <title>{members[i].titles[h]}</title>;
+		}
+		d.deputado += titles;
+		
+		var previousTitles = <previousTitles/>
+		for (var h = 0; h < members[i].previousTitles.length; h++) {
+			previousTitles.previousTitles += <previousTitle>{members[i].previousTitles[h]}</previousTitle>;
+		}
+		d.deputado += previousTitles;
+		
+		var comissions = <comissions/>
+		for (var h = 0; h < members[i].comissions.length; h++) {
+			comissions.comissions += <comission>{members[i].comissions[h]}</comission>;
+		}
+		d.deputado += comissions;
+		
+		var legislatures = <legislatures/>
+		for (var h = 0; h < members[i].legislatures.length; h++) {
+			legislatures.legislatures += <legislature>{members[i].legislatures[h]}</legislature>;
+		}
+		d.deputado += legislatures;
+		
+		data.deputados += d;
+	}
+	
+	return data;
+}
+
+
+response.object = searchParlamentMembers();
 
       ]]></execute>
     </select>
