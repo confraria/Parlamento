@@ -18,15 +18,19 @@ response.maxAge = 3600*24;
 y.include('http://agorasou.eu/parlamento/yqltables/ptparlamentYQL.js');
 
 var getRemoteMembers = function() {
-	var url = 'http://agorasou.eu/parlamento/deputados.html';
-	var query = y.query('select * from html where url=@url and xpath="//table/tr"', {url: url} );
-	var results = query.results.tr;
+	var url = 'http://github.com/luisbug/Parlamento/raw/master/data/deputados-min.xml';
+	var query = y.query('select * from xml where url=@url and xpath="//table/tr"', {url: url} );
+	var results = query.results.deputados.deputado;
 	var deputados = [];
 	for each (var deputado in results) {
-		var _id = deputado.td[0].a.@href.split("=")[1];
-		var _name = getValueString( deputado.td[0].a );
-		var _location = getValueString( deputado.td[1].span );
-		var _party = getValueString( deputado.td[2].span );
+		// var _id = deputado.td[0].a.@href.split("=")[1];
+		// 		var _name = getValueString( deputado.td[0].a );
+		// 		var _location = getValueString( deputado.td[1].span );
+		// 		var _party = getValueString( deputado.td[2].span );
+		var _id = getValueString( deputado.id );;
+		var _name = getValueString( deputado.name );
+		var _location = getValueString( deputado.location );
+		var _party = getValueString( deputado.party );
 		deputados.push(new MemberInfo(_id, _name, _party, _location));
 	}
 	
