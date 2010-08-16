@@ -15,7 +15,7 @@
       </inputs>
       <execute><![CDATA[
 response.maxAge = 3600*24;
-y.include('http://agorasou.eu/parlamento/yqltables/ptparlamentYQL.js');
+y.include('http://github.com/luisbug/Parlamento/raw/master/yqltables/ptparlamentYQL.js');
 
 var getRemoteMembers = function() {
 	var url = 'http://github.com/luisbug/Parlamento/raw/master/data/deputados-min.xml';
@@ -23,10 +23,6 @@ var getRemoteMembers = function() {
 	var results = query.results.deputados.deputado;
 	var deputados = [];
 	for each (var deputado in results) {
-		// var _id = deputado.td[0].a.@href.split("=")[1];
-		// 		var _name = getValueString( deputado.td[0].a );
-		// 		var _location = getValueString( deputado.td[1].span );
-		// 		var _party = getValueString( deputado.td[2].span );
 		var _id = getValueString( deputado.id );;
 		var _name = getValueString( deputado.name );
 		var _location = getValueString( deputado.location );
