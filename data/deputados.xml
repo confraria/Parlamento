@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<results>
+<deputados>
 		<deputado>
 			<id>2167</id>
 			<name>Abel Baptista</name>
@@ -1380,4 +1380,4 @@
 			<party>PS</party>
 			<location>Aveiro</location>
 		</deputado>
-</results>
+</deputados>
