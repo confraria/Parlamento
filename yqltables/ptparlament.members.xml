@@ -19,7 +19,7 @@ y.include('http://agorasou.eu/parlamento/yqltables/ptparlamentYQL.js');
 
 var getRemoteMembers = function() {
 	var url = 'http://github.com/luisbug/Parlamento/raw/master/data/deputados-min.xml';
-	var query = y.query('select * from xml where url=@url and xpath="//table/tr"', {url: url} );
+	var query = y.query('select * from xml where url=@url', {url: url} );
 	var results = query.results.deputados.deputado;
 	var deputados = [];
 	for each (var deputado in results) {
