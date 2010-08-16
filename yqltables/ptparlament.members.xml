@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
+  <meta>
+    <sampleQuery> select * from {table}</sampleQuery>
+  </meta>
+  <bindings>
+    <select itemPath="deputados.deputado" produces="XML">
+      <urls>
+        <url></url>
+      </urls>
+      <inputs>
+        <key id='party' type='xs:string' paramType='variable' />
+        <key id='location' type='xs:string' paramType='variable' />
+        <key id='name' type='xs:string' paramType='variable' />
+      </inputs>
+      <execute><![CDATA[
+response.maxAge = 3600*24;
+y.include('http://agorasou.eu/parlamento/yqltables/ptparlamentYQL.js');
+
+var getRemoteMembers = function() {
+	var url = 'http://agorasou.eu/parlamento/deputados.html';
+	var query = y.query('select * from html where url=@url and xpath="//table/tr"', {url: url} );
+	var results = query.results.tr;
+	var deputados = [];
+	for each (var deputado in results) {
+		var _id = deputado.td[0].a.@href.split("=")[1];
+		var _name = getValueString( deputado.td[0].a );
+		var _location = getValueString( deputado.td[1].span );
+		var _party = getValueString( deputado.td[2].span );
+		deputados.push(new MemberInfo(_id, _name, _party, _location));
+	}
+	
+	return deputados;
+}
+
+var wrapMembers = function(members) {
+	var total = members.length;
+	var data = <deputados/>;
+	
+	for (var i = 0; i< total; i++) {
+		data.deputados += members[i].getXML();
+	}
+		
+	return data;
+}
+
+var filterMembers = function(members) {
+	var result = [];
+	var filters = {};
+	for (var input in inputs) {
+		if (inputs[input] && members[0][input]) {
+			filters[input] = inputs[input];
+		}
+	}
+	for (var i = 0; i < members.length; i++) {
+		var valid = true;
+		var member = members[i];
+		for (var filter in filters) {
+			// valid = !!members[input].match(new Regexp(inputs[input],'i'));
+			valid = member[filter].toLowerCase() == filters[filter].toLowerCase();
+			if (!valid) break;
+		}
+		if (valid) result.push(member);
+	}
+	
+	return result;
+}
+
+var searchParlamentMembers = function() {
+	var members = filterMembers(getRemoteMembers());
+
+	
+	return wrapMembers(members);
+}
+
+
+response.object = searchParlamentMembers();
+
+      ]]></execute>
+    </select>
+  </bindings>
+</table>

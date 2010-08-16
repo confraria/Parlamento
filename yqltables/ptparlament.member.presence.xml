@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
+  <meta>
+    <sampleQuery> select * from {table} where id={id}</sampleQuery>
+  </meta>
+  <bindings>
+    <select itemPath="deputado" produces="XML">
+      <urls>
+        <url></url>
+      </urls>
+      <inputs>
+        <key id='id' type='xs:string' paramType='variable' />
+      </inputs>
+      <execute><![CDATA[
+response.maxAge = 3600*24;
+y.include('http://agorasou.eu/parlamento/yqltables/ptparlamentYQL.js');
+
+var searchMemberDetail = function() {
+	var member = new MemberInfo(inputs['id']);
+	member.getPresences();
+	
+	return member.getXML();
+}
+
+
+response.object = searchMemberDetail();
+
+      ]]></execute>
+    </select>
+  </bindings>
+</table>
