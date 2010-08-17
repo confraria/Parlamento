@@ -13,7 +13,7 @@
       </inputs>
       <execute><![CDATA[
 response.maxAge = 3600*24;
-y.include('http://agorasou.eu/parlamento/yqltables/ptparlamentYQL.js');
+y.include('http://github.com/luisbug/Parlamento/raw/master/yqltables/ptparlamentYQL.js');
 
 var searchMemberDetail = function() {
 	var member = new MemberInfo(inputs['id']);

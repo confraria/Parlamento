@@ -37,13 +37,13 @@ var wrapMembers = function(members) {
 	var total = members.length;
 	var data = <deputados/>;
 	
-	var urls = <urls/>;
-	urls.urls.@['presences'] = MemberInfo.prototype.PRESENCES_URL;
-	urls.urls.@['foto'] = MemberInfo.prototype.FOTO_URL;
-	urls.urls.@['detail'] = MemberInfo.prototype.DETAIL_URL;
-	urls.urls.@['activity'] = MemberInfo.prototype.ACTIVITY_URL;
-	urls.urls.@['interests'] = MemberInfo.prototype.INTERESTS_URL;
-	data.deputados += urls;
+	// var urls = <urls/>;
+	// 	urls.urls.@['presences'] = MemberInfo.prototype.PRESENCES_URL;
+	// 	urls.urls.@['foto'] = MemberInfo.prototype.FOTO_URL;
+	// 	urls.urls.@['detail'] = MemberInfo.prototype.DETAIL_URL;
+	// 	urls.urls.@['activity'] = MemberInfo.prototype.ACTIVITY_URL;
+	// 	urls.urls.@['interests'] = MemberInfo.prototype.INTERESTS_URL;
+	// 	data.deputados += urls;
 	
 	for (var i = 0; i< total; i++) {
 		data.deputados += members[i].getXML();
