@@ -12,23 +12,23 @@ MemberInfo.prototype.ACTIVITY_URL = 'http://www.parlamento.pt/DeputadoGP/Paginas
 MemberInfo.prototype.INTERESTS_URL = 'http://www.parlamento.pt/DeputadoGP/Paginas/RegistoInteresses.aspx?BID={id}';
 
 MemberInfo.prototype.getDetailURL = function() {
-	return  this.DETAIL_URL.match('{id}',this.id);
+	return  this.DETAIL_URL.replace('{id}',this.id);
 }
 
 MemberInfo.prototype.getActivitylURL = function() {
-	return  this.ACTIVITY_URL.match('{id}',this.id);
+	return  this.ACTIVITY_URL.replace('{id}',this.id);
 }
 
 MemberInfo.prototype.getInterestsURL = function() {
-	return  this.INTERESTS_URL.match('{id}',this.id);
+	return  this.INTERESTS_URL.replace('{id}',this.id);
 }
 
 MemberInfo.prototype.getFotoURL = function() {
-	return  this.FOTO_URL.match('{id}',this.id);
+	return  this.FOTO_URL.replace('{id}',this.id);
 }
 
 MemberInfo.prototype.getPresencesURL = function() {
-	return this.PRESENCES_URL.match('{id}',this.id);
+	return this.PRESENCES_URL.replace('{id}',this.id);
 }
 
 MemberInfo.prototype.getXML = function() {
