@@ -35,7 +35,7 @@ var getRemoteMembers = function() {
 
 var wrapMembers = function(members) {
 	var total = members.length;
-	var data = <data/>;
+	var data = <deputados/>;
 	
 	for (var i = 0; i< total; i++) {
 		data.deputados += members[i].getXML();
@@ -50,10 +50,10 @@ var wrapMembers = function(members) {
 		'INTERESTS_URL'
 	]
 	
-	// for (var i = 0; i < urlsString.length; i++) {
-	// 	var url = MemberInfo.prototype[urlsString[i]];
-	// 	data += <url>{url}</url>;
-	// }
+	for (var i = 0; i < urlsString.length; i++) {
+		var url = MemberInfo.prototype[urlsString[i]];
+		data += <url>{url}</url>;
+	}
 	
 	
 
