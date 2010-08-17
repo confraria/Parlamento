@@ -42,18 +42,12 @@ var wrapMembers = function(members) {
 	}
 	
 	var urls = <urls/>;
-	var urlsString = [
-		'PRESENCES_URL',
-		'FOTO_URL',
-		'DETAIL_URL',
-		'ACTIVITY_URL',
-		'INTERESTS_URL'
-	]
-	
-	for (var i = 0; i < urlsString.length; i++) {
-		var url = MemberInfo.prototype[urlsString[i]];
-		data += <url>{url}</url>;
-	}
+	urls.@['presences'] = MemberInfo.prototype.PRESENCES_URL;
+	urls.@['foto'] = MemberInfo.prototype.FOTO_URL;
+	urls.@['detail'] = MemberInfo.prototype.DETAIL_URL;
+	urls.@['activity'] = MemberInfo.prototype.ACTIVITY_URL;
+	urls.@['interests'] = MemberInfo.prototype.INTERESTS_URL;
+	data += urls;
 	
 	
 
