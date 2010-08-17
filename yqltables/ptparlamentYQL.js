@@ -184,7 +184,7 @@ MemberInfo.prototype.getActivity = function(query) {
 	}
 	var result = query.results;
 	var initiatives = result..table.(@['id'].toString().match('Iniciativas'))..tr;
-	var stats = [];
+	var initiativesData = [];
 	var initiativeTypes = [];
 
 	var first = true;
@@ -197,7 +197,7 @@ MemberInfo.prototype.getActivity = function(query) {
 		var type = getValueString( initiative.td[0].span );
 		if (!initiativeTypes.join().match(type)) {
 			initiativeTypes.push(type);
-			stats.push({
+			initiativesData.push({
 				type	: type,
 				count	: 1
 			});
@@ -212,12 +212,17 @@ MemberInfo.prototype.getActivity = function(query) {
 			}
 			found = stats[c].type == type;
 			if (found) {
-				stats[c].count++;
+				initiativesData[c].count++;
 			}
 			c++;
 		}
 	}
-	this.activity = { 'activity' : {'initiative' : stats} };
+	
+	var requestData = result..table.(@['id'].toString().match('Requerimentos'))..tr;
+	this.activity = { 'activity' : {
+			'initiative' 	: 	initiativesData
+			'request'		:  	requestData.length
+	}};
 }
 
 // Utilities
