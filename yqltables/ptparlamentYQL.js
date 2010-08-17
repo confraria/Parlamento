@@ -221,7 +221,7 @@ MemberInfo.prototype.getActivity = function(query) {
 	var requestData = result..table.(@['id'].toString().match('Requerimentos'))..tr;
 	this.activity = { 'activity' : {
 			'initiative' 	: 	initiativesData,
-			'request'		:  	requestData.length
+			'request'		:  	requestData.length()
 	}};
 }
 
