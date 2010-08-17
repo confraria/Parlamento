@@ -47,7 +47,7 @@ var wrapMembers = function(members) {
 	urls.@['detail'] = MemberInfo.prototype.DETAIL_URL;
 	urls.@['activity'] = MemberInfo.prototype.ACTIVITY_URL;
 	urls.@['interests'] = MemberInfo.prototype.INTERESTS_URL;
-	data += urls;
+	data.deputados += urls;
 	
 	
 
