@@ -37,10 +37,6 @@ var wrapMembers = function(members) {
 	var total = members.length;
 	var data = <deputados/>;
 	
-	for (var i = 0; i< total; i++) {
-		data.deputados += members[i].getXML();
-	}
-	
 	var urls = <urls/>;
 	urls.@['presences'] = MemberInfo.prototype.PRESENCES_URL;
 	urls.@['foto'] = MemberInfo.prototype.FOTO_URL;
@@ -49,9 +45,10 @@ var wrapMembers = function(members) {
 	urls.@['interests'] = MemberInfo.prototype.INTERESTS_URL;
 	data.deputados += urls;
 	
-	
+	for (var i = 0; i< total; i++) {
+		data.deputados += members[i].getXML();
+	}
 
-		
 	return data;
 }
 
