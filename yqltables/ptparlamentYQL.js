@@ -3,27 +3,32 @@ var MemberInfo = function(id, name, party, location) {
 	if (name) this.name = name;
 	if (party) this.party = party;
  	if (location) this.location = location;
-	this.photo = this.getFotoURL();
+	// this.photo = this.getFotoURL();
 }
+MemberInfo.prototype.PRESENCES_URL = 'http://www.parlamento.pt/DeputadoGP/Paginas/PresencasReunioesPlenarias.aspx?BID={id}';
+MemberInfo.prototype.FOTO_URL = 'http://app.parlamento.pt/webutils/getimage.aspx?type=deputado&id={id}';
+MemberInfo.prototype.DETAIL_URL = 'http://www.parlamento.pt/DeputadoGP/Paginas/Biografia.aspx?BID={id}';
+MemberInfo.prototype.ACTIVITY_URL = 'http://www.parlamento.pt/DeputadoGP/Paginas/ActividadeDeputado.aspx?BID={id}';
+MemberInfo.prototype.INTERESTS_URL = 'http://www.parlamento.pt/DeputadoGP/Paginas/RegistoInteresses.aspx?BID={id}';
 
 MemberInfo.prototype.getDetailURL = function() {
-	return 'http://www.parlamento.pt/DeputadoGP/Paginas/Biografia.aspx?BID=' + this.id;
+	return  this.DETAIL_URL.match('{id}',this.id);
 }
 
 MemberInfo.prototype.getActivitylURL = function() {
-	return 'http://www.parlamento.pt/DeputadoGP/Paginas/ActividadeDeputado.aspx?BID=' + this.id;
+	return  this.ACTIVITY_URL.match('{id}',this.id);
 }
 
 MemberInfo.prototype.getInterestsURL = function() {
-	return 'http://www.parlamento.pt/DeputadoGP/Paginas/RegistoInteresses.aspx?BID=' + this.id;
+	return  this.INTERESTS_URL.match('{id}',this.id);
 }
 
 MemberInfo.prototype.getFotoURL = function() {
-	return 'http://app.parlamento.pt/webutils/getimage.aspx?type=deputado&id=' + this.id;
+	return  this.FOTO_URL.match('{id}',this.id);
 }
 
 MemberInfo.prototype.getPresencesURL = function() {
-	return 'http://www.parlamento.pt/DeputadoGP/Paginas/PresencasReunioesPlenarias.aspx?BID=' + this.id;
+	return this.PRESENCES_URL.match('{id}',this.id);
 }
 
 MemberInfo.prototype.getXML = function() {

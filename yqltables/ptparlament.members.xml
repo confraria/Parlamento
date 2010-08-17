@@ -35,11 +35,28 @@ var getRemoteMembers = function() {
 
 var wrapMembers = function(members) {
 	var total = members.length;
-	var data = <deputados/>;
+	var data = <data/>;
 	
 	for (var i = 0; i< total; i++) {
 		data.deputados += members[i].getXML();
 	}
+	
+	var urls = <urls/>;
+	var urlsString = [
+		'PRESENCES_URL',
+		'FOTO_URL',
+		'DETAIL_URL',
+		'ACTIVITY_URL',
+		'INTERESTS_URL'
+	]
+	
+	for (var i = 0; i < urlsString.length; i++) {
+		var url = MemberInfo.prototype[urlsString[i]];
+		data += <url>{url}</url>;
+	}
+	
+	
+
 		
 	return data;
 }
