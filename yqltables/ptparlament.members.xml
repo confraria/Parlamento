@@ -50,10 +50,10 @@ var wrapMembers = function(members) {
 		'INTERESTS_URL'
 	]
 	
-	for (var i = 0; i < urlsString.length; i++) {
-		var url = MemberInfo.prototype[urlsString[i]];
-		data += <url>{url}</url>;
-	}
+	// for (var i = 0; i < urlsString.length; i++) {
+	// 	var url = MemberInfo.prototype[urlsString[i]];
+	// 	data += <url>{url}</url>;
+	// }
 	
 	
 
