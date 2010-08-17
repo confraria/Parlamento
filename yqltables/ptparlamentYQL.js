@@ -207,10 +207,10 @@ MemberInfo.prototype.getActivity = function(query) {
 		var found = false;
 		var c = 0;
 		while (!found) {
-			if (!stats[c]) {
+			if (!initiativesData[c]) {
 				break;
 			}
-			found = stats[c].type == type;
+			found = initiativesData[c].type == type;
 			if (found) {
 				initiativesData[c].count++;
 			}
