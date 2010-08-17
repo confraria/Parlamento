@@ -219,9 +219,19 @@ MemberInfo.prototype.getActivity = function(query) {
 	}
 	
 	var requestData = result..table.(@['id'].toString().match('Requerimentos'))..tr;
+	var questionsData = result..table.(@['id'].toString().match('pnlPerguntas'))..tr;
+	var comissionsData = result..table.(@['id'].toString().match('dtgComissoes'))..tr;
+	var interventionsData = result..table.(@['id'].toString().match('dtgIntervencoes'))..tr;
+	var auditionsData = result..table.(@['id'].toString().match('dtgAudicoes'))..tr;
+	var hearingsData = result..table.(@['id'].toString().match('dtgAudiencias'))..tr;
 	this.activity = { 'activity' : {
 			'initiative' 	: 	initiativesData,
-			'request'		:  	requestData.length()
+			'requests'		:  	requestData.length()-1,
+			'questions'		:  	questionsData.length()-1,
+			'comissions'	:  	comissionsData.length()-1,
+			'interventions'	:  	interventionsData.length()-1,
+			'auditions'		:  	auditionsData.length()-1,
+			'hearings'		:  	hearingsData.length()-1,
 	}};
 }
 
