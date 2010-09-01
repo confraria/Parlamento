@@ -226,12 +226,12 @@ MemberInfo.prototype.getActivity = function(query) {
 	var hearingsData = result..table.(@['id'].toString().match('dtgAudiencias'))..tr;
 	this.activity = { 'activity' : {
 			'initiative' 	: 	initiativesData,
-			'requests'		:  	requestData.length()-1,
-			'questions'		:  	questionsData.length()-1,
-			'comissions'	:  	comissionsData.length()-1,
-			'interventions'	:  	interventionsData.length()-1,
-			'auditions'		:  	auditionsData.length()-1,
-			'hearings'		:  	hearingsData.length()-1,
+			'requests'		:  	requestData.length ? requestData.length()-1 : 0,
+			'questions'		:  	questionsData.length ? questionsData.length()-1 : 0,
+			'comissions'	:  	comissionsData.length ? comissionsData.length()-1 : 0,
+			'interventions'	:  	interventionsData.length ? interventionsData.length()-1 : 0,
+			'auditions'		:  	auditionsData.length ? auditionsData.length()-1 : 0,
+			'hearings'		:  	hearingsData.length ? hearingsData.length()-1 : 0,
 	}};
 }
 
