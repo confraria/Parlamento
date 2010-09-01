@@ -17,7 +17,8 @@ y.include('http://github.com/luisbug/Parlamento/raw/master/yqltables/ptparlament
 
 var searchMemberDetail = function() {
 	var member = new MemberInfo(inputs['id']);
-	member.getActivity();
+	var qActivity = member.queryActivity();
+	member.getActivity(qActivity);
 	
 	return member.getXML();
 }

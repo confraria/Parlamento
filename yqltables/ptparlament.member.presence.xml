@@ -16,8 +16,8 @@ response.maxAge = 3600*24;
 y.include('http://github.com/luisbug/Parlamento/raw/master/yqltables/ptparlamentYQL.js');
 
 var searchMemberDetail = function() {
-	var member = new MemberInfo(inputs['id']);
-	member.getPresences();
+	var qPresences = member.queryPresences();
+	member.getPresences(qPresences);
 	
 	return member.getXML();
 }
